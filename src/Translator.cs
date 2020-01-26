@@ -1,37 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Net.Http;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿// Copyright © 2020 Andrew Vardeman.  Published under the MIT license.
+// See license.txt in the AzureMultiTranslator distribution or repository for the
+// full text of the license.
+
 using AzureMultiTranslator.Contracts;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace AzureMultiTranslator
 {
-    public class Translator : INotifyPropertyChanged
+    public class Translator
     {
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        private string _subscriptionKey;
-        public string SubscriptionKey
+        private Settings _settings;
+
+        public Translator(Settings settings)
         {
-            get => _subscriptionKey;
-            set => SetField(ref _subscriptionKey, value);
-        }
-
-        private string _endpoint;
-
-        public string Endpoint
-        {
-            get => _endpoint;
-            set => SetField(ref _endpoint, value);
-        }
-
-        public Translator()
-        {
-            Endpoint = "https://api.cognitive.microsofttranslator.com";
+            _settings = settings;
         }
 
         public async Task<List<string>> Translate(string from, string[] to, string inputText, bool html)
@@ -46,9 +34,9 @@ namespace AzureMultiTranslator
             using (var request = new HttpRequestMessage())
             {
                 request.Method = HttpMethod.Post;
-                request.RequestUri = new Uri(Endpoint + route);
+                request.RequestUri = new Uri(_settings.Endpoint + route);
                 request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
-                request.Headers.Add("Ocp-Apim-Subscription-Key", SubscriptionKey);
+                request.Headers.Add("Ocp-Apim-Subscription-Key", _settings.SubscriptionKey);
 
                 HttpResponseMessage response = await client.SendAsync(request).ConfigureAwait(false);
 
@@ -73,19 +61,6 @@ namespace AzureMultiTranslator
 
                 return translations;
             }
-        }
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-            field = value;
-            OnPropertyChanged(propertyName);
-            return true;
         }
 
     }

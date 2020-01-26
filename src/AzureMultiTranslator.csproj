@@ -55,6 +55,7 @@
     <Compile Include="Contracts\TextResult.cs" />
     <Compile Include="Contracts\Translation.cs" />
     <Compile Include="Contracts\TranslationResult.cs" />
+    <Compile Include="EncryptingJsonConverter.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -63,6 +64,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="TranslatedTextRow.cs" />
     <Compile Include="Translator.cs" />
     <EmbeddedResource Include="MainForm.resx">
@@ -79,8 +81,8 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\Settings.datasource" />
     <None Include="Properties\DataSources\TranslatedTextRow.datasource" />
-    <None Include="Properties\DataSources\Translator.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
