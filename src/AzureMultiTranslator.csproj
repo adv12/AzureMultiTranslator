@@ -49,8 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AzureException.cs" />
     <Compile Include="Contracts\Alignment.cs" />
     <Compile Include="Contracts\DetectedLanguage.cs" />
+    <Compile Include="Contracts\Error.cs" />
+    <Compile Include="Contracts\ErrorWrapper.cs" />
     <Compile Include="Contracts\SentenceLength.cs" />
     <Compile Include="Contracts\TextResult.cs" />
     <Compile Include="Contracts\Translation.cs" />
@@ -67,6 +70,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="TranslatedTextRow.cs" />
     <Compile Include="Translator.cs" />
+    <Compile Include="UnrecognizedResponseException.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

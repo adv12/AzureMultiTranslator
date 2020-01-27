@@ -162,10 +162,21 @@ namespace AzureMultiTranslator
                     {
                         if (translations[i].Length <= 5000)
                         {
-                            List<string> backTranslations =
-                               await Translator.Translate(languages[i], new[] { Settings.SourceLanguage },
-                                  translations[i], htmlCheckBox.Checked);
-                            Rows[i].BackTranslatedText = backTranslations[0];
+                            try
+                            {
+                                List<string> backTranslations =
+                                   await Translator.Translate(languages[i], new[] { Settings.SourceLanguage },
+                                      translations[i], htmlCheckBox.Checked);
+                                Rows[i].BackTranslatedText = backTranslations[0];
+                            }
+                            catch (AzureException ex)
+                            {
+                                ShowAzureException(ex);
+                            }
+                            catch (UnrecognizedResponseException ex)
+                            {
+                                ShowUnrecognizedResponseException(ex);
+                            }
                         }
                         else
                         {
@@ -178,9 +189,17 @@ namespace AzureMultiTranslator
                     }
                 }
             }
+            catch (AzureException ex)
+            {
+                ShowAzureException(ex);
+            }
+            catch (UnrecognizedResponseException ex)
+            {
+                ShowUnrecognizedResponseException(ex);
+            }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Exception");
+                MessageBox.Show(this, $"Unknown exception: {ex.Message}");
             }
 
             if (translationGrid.SelectedRows.Count > 0)
@@ -190,6 +209,16 @@ namespace AzureMultiTranslator
             }
 
             Enabled = true;
+        }
+
+        private void ShowAzureException(AzureException ex)
+        {
+            MessageBox.Show(this, $"Azure error {ex.Code}: {ex.Message}");
+        }
+
+        private void ShowUnrecognizedResponseException(UnrecognizedResponseException ex)
+        {
+            MessageBox.Show(this, ex.Message);
         }
 
         private void SyncBackTranslateUI()

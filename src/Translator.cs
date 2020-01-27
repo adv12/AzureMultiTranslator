@@ -53,10 +53,17 @@ namespace AzureMultiTranslator
                         }
                     }
                 }
-                catch (Exception e)
+                catch (JsonException)
                 {
-                    Console.WriteLine(e);
-                    throw;
+                    try
+                    {
+                        ErrorWrapper wrapper = JsonConvert.DeserializeObject<ErrorWrapper>(result);
+                        throw new AzureException(wrapper.Error.Code, wrapper.Error.Message);
+                    }
+                    catch (JsonException)
+                    {
+                        throw new UnrecognizedResponseException(result);
+                    }
                 }
 
                 return translations;
