@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 
@@ -82,13 +83,15 @@ namespace AzureMultiTranslator
             Translator = new Translator(Settings);
             translatedTextRowBindingSource.DataSource = Rows;
             SyncBackTranslateUI();
+            FireBackTranslate();
         }
 
-        private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private async void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(Settings.BackTranslate))
             {
                 SyncBackTranslateUI();
+                FireBackTranslate();
             }
             if (e.PropertyName == nameof(Settings.SubscriptionKey))
             {
@@ -158,36 +161,8 @@ namespace AzureMultiTranslator
                 for (int i = 0; i < translations.Count; i++)
                 {
                     Rows[i].TranslatedText = translations[i];
-                    if (Settings.BackTranslate)
-                    {
-                        if (translations[i].Length <= 5000)
-                        {
-                            try
-                            {
-                                List<string> backTranslations =
-                                   await Translator.Translate(languages[i], new[] { Settings.SourceLanguage },
-                                      translations[i], htmlCheckBox.Checked);
-                                Rows[i].BackTranslatedText = backTranslations[0];
-                            }
-                            catch (AzureException ex)
-                            {
-                                ShowAzureException(ex);
-                            }
-                            catch (UnrecognizedResponseException ex)
-                            {
-                                ShowUnrecognizedResponseException(ex);
-                            }
-                        }
-                        else
-                        {
-                            Rows[i].BackTranslatedText = "Too long to back-translate";
-                        }
-                    }
-                    else
-                    {
-                        Rows[i].BackTranslatedText = "";
-                    }
                 }
+                await BackTranslate();
             }
             catch (AzureException ex)
             {
@@ -209,6 +184,54 @@ namespace AzureMultiTranslator
             }
 
             Enabled = true;
+        }
+
+        private async void FireBackTranslate()
+        {
+            await BackTranslate();
+        }
+
+        private async Task BackTranslate()
+        {
+            bool savedEnabledState = Enabled;
+            Enabled = false;
+            foreach (TranslatedTextRow row in Rows)
+            {
+                if (Settings.BackTranslate)
+                {
+                    if (string.IsNullOrEmpty(row.TranslatedText))
+                    {
+                        row.BackTranslatedText = string.Empty;
+                    }
+                    else if (row.TranslatedText.Length <= 5000)
+                    {
+                        try
+                        {
+                            List<string> backTranslations =
+                               await Translator.Translate(row.Language, new[] { Settings.SourceLanguage },
+                                  row.TranslatedText, htmlCheckBox.Checked);
+                            row.BackTranslatedText = backTranslations[0];
+                        }
+                        catch (AzureException ex)
+                        {
+                            ShowAzureException(ex);
+                        }
+                        catch (UnrecognizedResponseException ex)
+                        {
+                            ShowUnrecognizedResponseException(ex);
+                        }
+                    }
+                    else
+                    {
+                        row.BackTranslatedText = "Too long to back-translate";
+                    }
+                }
+                else
+                {
+                    row.BackTranslatedText = "";
+                }
+            }
+            Enabled = savedEnabledState;
         }
 
         private void ShowAzureException(AzureException ex)
