@@ -1,16 +1,19 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
+﻿// Copyright © 2020 Andrew Vardeman.  Published under the MIT license.
+// See license.txt in the AzureMultiTranslator distribution or repository for the
+// full text of the license.
+
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MultiTranslator")]
+[assembly: AssemblyTitle("AzureMultiTranslator")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Ag Leader Technology")]
-[assembly: AssemblyProduct("MultiTranslator")]
-[assembly: AssemblyCopyright("Copyright © Ag Leader Technology 2020")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("AzureMultiTranslator")]
+[assembly: AssemblyCopyright("Copyright © Andrew Vardeman 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
