@@ -26,11 +26,15 @@ namespace AzureMultiTranslator
 
         private Settings Settings { get; }
 
-        public BindingList<TranslatedTextRow> Rows { get; } = new BindingList<TranslatedTextRow>();
+        private List<TranslatedTextRow> BackingRows { get; } = new List<TranslatedTextRow>();
+
+        public BindingList<TranslatedTextRow> Rows { get; }
 
         public MainForm()
         {
             InitializeComponent();
+
+            Rows = new BindingList<TranslatedTextRow>(BackingRows);
 
             SettingsDirPath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), APPNAME);
@@ -143,6 +147,7 @@ namespace AzureMultiTranslator
         private void addLanguageButton_Click(object sender, EventArgs e)
         {
             Rows.Add(new TranslatedTextRow(addLanguageTextBox.Text));
+            addLanguageTextBox.Clear();
         }
 
         private async void translateButton_Click(object sender, EventArgs e)
@@ -324,6 +329,22 @@ namespace AzureMultiTranslator
             {
                 Settings.WindowSize = Size;
             }
+        }
+
+        private void addLanguageTextBox_Enter(object sender, EventArgs e)
+        {
+            AcceptButton = addLanguageButton;
+        }
+
+        private void addLanguageTextBox_Leave(object sender, EventArgs e)
+        {
+            AcceptButton = null;
+        }
+
+        private void sortButton_Click(object sender, EventArgs e)
+        {
+            BackingRows.Sort((r1, r2) => r1.Language.CompareTo(r2.Language));
+            Rows.ResetBindings();
         }
     }
 }

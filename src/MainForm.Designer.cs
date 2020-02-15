@@ -32,9 +32,9 @@
             this.englishTextBox = new System.Windows.Forms.TextBox();
             this.mainSplitContainer = new System.Windows.Forms.SplitContainer();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.languageTextBox = new System.Windows.Forms.TextBox();
             this.lengthTextBox = new System.Windows.Forms.TextBox();
             this.lengthLabel = new System.Windows.Forms.Label();
-            this.translateButton = new System.Windows.Forms.Button();
             this.htmlCheckBox = new System.Windows.Forms.CheckBox();
             this.languageLabel = new System.Windows.Forms.Label();
             this.translationsPaneSplitContainer = new System.Windows.Forms.SplitContainer();
@@ -48,8 +48,10 @@
             this.backTranslatedTextBox = new System.Windows.Forms.TextBox();
             this.backTranslatedLabel = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.backTranslateCheckBox = new System.Windows.Forms.CheckBox();
             this.addLanguageButton = new System.Windows.Forms.Button();
             this.addLanguageTextBox = new System.Windows.Forms.TextBox();
+            this.translateButton = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.rememberKeyCheckBox = new System.Windows.Forms.CheckBox();
             this.subscriptionKeyTextBox = new System.Windows.Forms.TextBox();
@@ -57,8 +59,7 @@
             this.endpointTextBox = new System.Windows.Forms.TextBox();
             this.endpointLabel = new System.Windows.Forms.Label();
             this.settingsTimer = new System.Windows.Forms.Timer(this.components);
-            this.languageTextBox = new System.Windows.Forms.TextBox();
-            this.backTranslateCheckBox = new System.Windows.Forms.CheckBox();
+            this.sortButton = new System.Windows.Forms.Button();
             this.settingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.languageDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.translatedTextDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -132,6 +133,14 @@
             this.panel2.Size = new System.Drawing.Size(650, 62);
             this.panel2.TabIndex = 2;
             // 
+            // languageTextBox
+            // 
+            this.languageTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.settingsBindingSource, "SourceLanguage", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.languageTextBox.Location = new System.Drawing.Point(132, 14);
+            this.languageTextBox.Name = "languageTextBox";
+            this.languageTextBox.Size = new System.Drawing.Size(100, 31);
+            this.languageTextBox.TabIndex = 6;
+            // 
             // lengthTextBox
             // 
             this.lengthTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -153,17 +162,6 @@
             this.lengthLabel.Size = new System.Drawing.Size(84, 25);
             this.lengthLabel.TabIndex = 4;
             this.lengthLabel.Text = "Length:";
-            // 
-            // translateButton
-            // 
-            this.translateButton.Location = new System.Drawing.Point(6, 7);
-            this.translateButton.Margin = new System.Windows.Forms.Padding(6);
-            this.translateButton.Name = "translateButton";
-            this.translateButton.Size = new System.Drawing.Size(150, 44);
-            this.translateButton.TabIndex = 3;
-            this.translateButton.Text = "Translate!";
-            this.translateButton.UseVisualStyleBackColor = true;
-            this.translateButton.Click += new System.EventHandler(this.translateButton_Click);
             // 
             // htmlCheckBox
             // 
@@ -335,6 +333,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.sortButton);
             this.panel1.Controls.Add(this.backTranslateCheckBox);
             this.panel1.Controls.Add(this.addLanguageButton);
             this.panel1.Controls.Add(this.addLanguageTextBox);
@@ -345,6 +344,19 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1310, 62);
             this.panel1.TabIndex = 1;
+            // 
+            // backTranslateCheckBox
+            // 
+            this.backTranslateCheckBox.AutoSize = true;
+            this.backTranslateCheckBox.Checked = true;
+            this.backTranslateCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.backTranslateCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.settingsBindingSource, "BackTranslate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.backTranslateCheckBox.Location = new System.Drawing.Point(165, 16);
+            this.backTranslateCheckBox.Name = "backTranslateCheckBox";
+            this.backTranslateCheckBox.Size = new System.Drawing.Size(189, 29);
+            this.backTranslateCheckBox.TabIndex = 4;
+            this.backTranslateCheckBox.Text = "Back-Translate";
+            this.backTranslateCheckBox.UseVisualStyleBackColor = true;
             // 
             // addLanguageButton
             // 
@@ -367,6 +379,19 @@
             this.addLanguageTextBox.Name = "addLanguageTextBox";
             this.addLanguageTextBox.Size = new System.Drawing.Size(98, 31);
             this.addLanguageTextBox.TabIndex = 1;
+            this.addLanguageTextBox.Enter += new System.EventHandler(this.addLanguageTextBox_Enter);
+            this.addLanguageTextBox.Leave += new System.EventHandler(this.addLanguageTextBox_Leave);
+            // 
+            // translateButton
+            // 
+            this.translateButton.Location = new System.Drawing.Point(6, 7);
+            this.translateButton.Margin = new System.Windows.Forms.Padding(6);
+            this.translateButton.Name = "translateButton";
+            this.translateButton.Size = new System.Drawing.Size(150, 44);
+            this.translateButton.TabIndex = 3;
+            this.translateButton.Text = "Translate!";
+            this.translateButton.UseVisualStyleBackColor = true;
+            this.translateButton.Click += new System.EventHandler(this.translateButton_Click);
             // 
             // panel3
             // 
@@ -437,26 +462,18 @@
             this.settingsTimer.Interval = 250;
             this.settingsTimer.Tick += new System.EventHandler(this.settingsTimer_Tick);
             // 
-            // languageTextBox
+            // sortButton
             // 
-            this.languageTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.settingsBindingSource, "SourceLanguage", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.languageTextBox.Location = new System.Drawing.Point(132, 14);
-            this.languageTextBox.Name = "languageTextBox";
-            this.languageTextBox.Size = new System.Drawing.Size(100, 31);
-            this.languageTextBox.TabIndex = 6;
-            // 
-            // backTranslateCheckBox
-            // 
-            this.backTranslateCheckBox.AutoSize = true;
-            this.backTranslateCheckBox.Checked = true;
-            this.backTranslateCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.backTranslateCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.settingsBindingSource, "BackTranslate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.backTranslateCheckBox.Location = new System.Drawing.Point(165, 16);
-            this.backTranslateCheckBox.Name = "backTranslateCheckBox";
-            this.backTranslateCheckBox.Size = new System.Drawing.Size(189, 29);
-            this.backTranslateCheckBox.TabIndex = 4;
-            this.backTranslateCheckBox.Text = "Back-Translate";
-            this.backTranslateCheckBox.UseVisualStyleBackColor = true;
+            this.sortButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.sortButton.AutoSize = true;
+            this.sortButton.Location = new System.Drawing.Point(934, 8);
+            this.sortButton.Margin = new System.Windows.Forms.Padding(6);
+            this.sortButton.Name = "sortButton";
+            this.sortButton.Size = new System.Drawing.Size(61, 42);
+            this.sortButton.TabIndex = 5;
+            this.sortButton.Text = "Sort";
+            this.sortButton.UseVisualStyleBackColor = true;
+            this.sortButton.Click += new System.EventHandler(this.sortButton_Click);
             // 
             // settingsBindingSource
             // 
@@ -569,6 +586,7 @@
         private System.Windows.Forms.Timer settingsTimer;
         private System.Windows.Forms.TextBox languageTextBox;
         private System.Windows.Forms.CheckBox backTranslateCheckBox;
+        private System.Windows.Forms.Button sortButton;
     }
 }
 
