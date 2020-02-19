@@ -14,7 +14,7 @@ namespace AzureMultiTranslator
 
         public string Copy => "Copy";
 
-        public string Remove => "Remove";
+        public string Remove => "X";
 
         public TranslatedTextRow(string language)
         {

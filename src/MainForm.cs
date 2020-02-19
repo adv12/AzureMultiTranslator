@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
@@ -116,7 +117,8 @@ namespace AzureMultiTranslator
 
         private void translationGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == 2 || e.ColumnIndex == 4)
+            DataGridViewColumn column = translationGrid.Columns[e.ColumnIndex];
+            if (column == CopyTranslatedColumn || column == copyBackTranslatedColumn)
             {
                 string text = (string)translationGrid.Rows[e.RowIndex].Cells[e.ColumnIndex - 1].Value;
                 if (string.IsNullOrEmpty(text))
@@ -132,7 +134,7 @@ namespace AzureMultiTranslator
             translatedTextBox.Text = "" + Rows[e.RowIndex].TranslatedText;
             backTranslatedTextBox.Text = "" + Rows[e.RowIndex].BackTranslatedText;
 
-            if (e.ColumnIndex == 5)
+            if (column == deleteColumn)
             {
                 DialogResult result = MessageBox.Show(
                    $"Remove language \"{Rows[e.RowIndex].Language}\"?", "Remove Language?",
@@ -345,6 +347,83 @@ namespace AzureMultiTranslator
         {
             BackingRows.Sort((r1, r2) => r1.Language.CompareTo(r2.Language));
             Rows.ResetBindings();
+        }
+
+        private void upButton_Click(object sender, EventArgs e)
+        {
+            List<int> selectedIndices = GetSelectedIndices();
+            if (selectedIndices.Count > 0)
+            {
+                int insertIndex = selectedIndices[0];
+                if (insertIndex > 0)
+                {
+                    insertIndex--;
+                }
+
+                List<TranslatedTextRow> rows = GetRowsAtIndices(selectedIndices);
+                BackingRows.RemoveAll(r => rows.Contains(r));
+                ReinsertAndSelect(insertIndex, rows);
+            }
+        }
+
+        private void downButton_Click(object sender, EventArgs e)
+        {
+            List<int> selectedIndices = GetSelectedIndices();
+            if (selectedIndices.Count > 0)
+            {
+                TranslatedTextRow rowToInsertAfter = null;
+                int newIndex = selectedIndices.Last();
+                if (newIndex < BackingRows.Count - 1)
+                {
+                    rowToInsertAfter = Rows[newIndex + 1];
+                }
+                List<TranslatedTextRow> rows = GetRowsAtIndices(selectedIndices);
+                BackingRows.RemoveAll(r => rows.Contains(r));
+                int insertIndex = BackingRows.Count;
+                if (rowToInsertAfter != null)
+                {
+                    insertIndex = BackingRows.IndexOf(rowToInsertAfter) + 1;
+                }
+                ReinsertAndSelect(insertIndex, rows);
+            }
+        }
+
+        private List<int> GetSelectedIndices()
+        {
+            List<int> selectedIndices = new List<int>();
+            var selectedRows = translationGrid.SelectedRows;
+            if (selectedRows.Count > 0)
+            {
+                foreach (DataGridViewRow row in selectedRows)
+                {
+                    selectedIndices.Add(row.Index);
+                }
+            }
+            selectedIndices.Sort();
+
+            return selectedIndices;
+        }
+
+        private List<TranslatedTextRow> GetRowsAtIndices(List<int> indices)
+        {
+            List<TranslatedTextRow> rows = new List<TranslatedTextRow>();
+            foreach (int index in indices)
+            {
+                rows.Add(Rows[index]);
+            }
+
+            return rows;
+        }
+
+        private void ReinsertAndSelect(int insertIndex, List<TranslatedTextRow> rows)
+        {
+            BackingRows.InsertRange(insertIndex, rows);
+            Rows.ResetBindings();
+            translationGrid.ClearSelection();
+            for (int i = insertIndex; i < insertIndex + rows.Count; i++)
+            {
+                translationGrid.Rows[i].Selected = true;
+            }
         }
     }
 }
