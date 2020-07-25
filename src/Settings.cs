@@ -36,6 +36,14 @@ namespace AzureMultiTranslator
             set => SetField(ref _endpoint, value);
         }
 
+        private decimal _maxChars = 5000;
+
+        public decimal MaxChars
+        {
+            get => _maxChars;
+            set => SetField(ref _maxChars, value);
+        }
+
         private string _sourceLanguage = "en";
         public string SourceLanguage
         {
