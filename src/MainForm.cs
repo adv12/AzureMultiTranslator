@@ -155,20 +155,23 @@ namespace AzureMultiTranslator
         private async void translateButton_Click(object sender, EventArgs e)
         {
             Enabled = false;
-            string[] languages = new string[Rows.Count];
-            for (int i = 0; i < languages.Length; i++)
-            {
-                languages[i] = Rows[i].Language;
-            }
-
+            List<TranslatedTextRow> rowsToTranslate = Rows.Where(r => r.Translate).ToList();
+            int length = sourceTextBox.Text.Length;
+            int rowsPerCall = Math.Max(1, length > 0 ? (int)Math.Min(maxCharsUpDown.Value / length, rowsToTranslate.Count) : rowsToTranslate.Count);
             try
             {
-                List<string> translations = await Translator.Translate(Settings.SourceLanguage,
-                    languages, englishTextBox.Text, htmlCheckBox.Checked);
-                for (int i = 0; i < translations.Count; i++)
+                for (int i = 0; i < rowsToTranslate.Count; i += rowsPerCall)
                 {
-                    Rows[i].TranslatedText = translations[i];
+                    List<TranslatedTextRow> rowsThisCall = rowsToTranslate.Skip(i).Take(rowsPerCall).ToList();
+                    string[] languages = rowsThisCall.Select(r => r.Language).ToArray();
+                    List<string> translations = await Translator.Translate(Settings.SourceLanguage,
+                        languages, sourceTextBox.Text, htmlCheckBox.Checked);
+                    for (int j = 0; j < translations.Count; j++)
+                    {
+                        rowsThisCall[j].TranslatedText = translations[j];
+                    }
                 }
+
                 await BackTranslate();
             }
             catch (AzureException ex)
@@ -260,14 +263,14 @@ namespace AzureMultiTranslator
 
         private void UpdateTranslateButton()
         {
-            int length = englishTextBox.Text.Length;
+            int length = sourceTextBox.Text.Length;
             translateButton.Enabled = length > 0 && length <= 5000 && !string.IsNullOrWhiteSpace(Settings.SubscriptionKey);
         }
 
         private void englishTextBox_TextChanged(object sender, EventArgs e)
         {
             UpdateTranslateButton();
-            lengthTextBox.Text = englishTextBox.Text.Length.ToString();
+            lengthTextBox.Text = sourceTextBox.Text.Length.ToString();
             if (translateButton.Enabled)
             {
                 lengthTextBox.ForeColor = SystemColors.ControlText;

@@ -6,6 +6,8 @@ namespace AzureMultiTranslator
 {
     public class TranslatedTextRow
     {
+        public bool Translate { get; set; } = true;
+
         public string Language { get; set; } = "";
 
         public string TranslatedText { get; set; } = "";
