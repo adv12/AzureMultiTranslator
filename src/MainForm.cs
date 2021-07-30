@@ -118,9 +118,13 @@ namespace AzureMultiTranslator
         private void translationGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             DataGridViewColumn column = translationGrid.Columns[e.ColumnIndex];
-            if (column == CopyTranslatedColumn || column == copyBackTranslatedColumn)
+            if (column == copyTranslatedColumn || column == copyBackTranslatedColumn)
             {
-                string text = (string)translationGrid.Rows[e.RowIndex].Cells[e.ColumnIndex - 1].Value;
+                string text = Rows[e.RowIndex].TranslatedText;
+                if (column == copyBackTranslatedColumn)
+                {
+                    text = Rows[e.RowIndex].BackTranslatedText;
+                }
                 if (string.IsNullOrEmpty(text))
                 {
                     Clipboard.Clear();
@@ -205,7 +209,7 @@ namespace AzureMultiTranslator
         {
             bool savedEnabledState = Enabled;
             Enabled = false;
-            foreach (TranslatedTextRow row in Rows)
+            foreach (TranslatedTextRow row in Rows.Where(r => r.Translate))
             {
                 if (Settings.BackTranslate)
                 {
@@ -256,8 +260,8 @@ namespace AzureMultiTranslator
 
         private void SyncBackTranslateUI()
         {
-            translationGrid.Columns[3].Visible = translationGrid.Columns[4].Visible =
-                Settings.BackTranslate;
+            copyBackTranslatedColumn.Visible =
+                backTranslatedTextDataGridViewTextBoxColumn.Visible = Settings.BackTranslate;
             translationsTextBoxesSplitContainer.Panel2Collapsed = !Settings.BackTranslate;
         }
 

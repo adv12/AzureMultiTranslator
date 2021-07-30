@@ -33,6 +33,7 @@
          this.mainSplitContainer = new System.Windows.Forms.SplitContainer();
          this.panel2 = new System.Windows.Forms.Panel();
          this.languageTextBox = new System.Windows.Forms.TextBox();
+         this.settingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
          this.lengthTextBox = new System.Windows.Forms.TextBox();
          this.lengthLabel = new System.Windows.Forms.Label();
          this.htmlCheckBox = new System.Windows.Forms.CheckBox();
@@ -40,9 +41,13 @@
          this.translationsPaneSplitContainer = new System.Windows.Forms.SplitContainer();
          this.translationGrid = new System.Windows.Forms.DataGridView();
          this.Translate = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-         this.CopyTranslatedColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+         this.languageDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+         this.translatedTextDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+         this.copyTranslatedColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+         this.backTranslatedTextDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
          this.copyBackTranslatedColumn = new System.Windows.Forms.DataGridViewButtonColumn();
          this.deleteColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+         this.translatedTextRowBindingSource = new System.Windows.Forms.BindingSource(this.components);
          this.translationsTextBoxesSplitContainer = new System.Windows.Forms.SplitContainer();
          this.translatedTextBox = new System.Windows.Forms.TextBox();
          this.translatedLabel = new System.Windows.Forms.Label();
@@ -57,29 +62,26 @@
          this.addLanguageTextBox = new System.Windows.Forms.TextBox();
          this.translateButton = new System.Windows.Forms.Button();
          this.panel3 = new System.Windows.Forms.Panel();
+         this.maxCharsUpDown = new System.Windows.Forms.NumericUpDown();
+         this.maxCharsLabel = new System.Windows.Forms.Label();
          this.rememberKeyCheckBox = new System.Windows.Forms.CheckBox();
          this.subscriptionKeyTextBox = new System.Windows.Forms.TextBox();
          this.keyLabel = new System.Windows.Forms.Label();
          this.endpointTextBox = new System.Windows.Forms.TextBox();
          this.endpointLabel = new System.Windows.Forms.Label();
          this.settingsTimer = new System.Windows.Forms.Timer(this.components);
-         this.maxCharsLabel = new System.Windows.Forms.Label();
-         this.maxCharsUpDown = new System.Windows.Forms.NumericUpDown();
-         this.settingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
-         this.languageDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-         this.translatedTextDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-         this.backTranslatedTextDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-         this.translatedTextRowBindingSource = new System.Windows.Forms.BindingSource(this.components);
          ((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).BeginInit();
          this.mainSplitContainer.Panel1.SuspendLayout();
          this.mainSplitContainer.Panel2.SuspendLayout();
          this.mainSplitContainer.SuspendLayout();
          this.panel2.SuspendLayout();
+         ((System.ComponentModel.ISupportInitialize)(this.settingsBindingSource)).BeginInit();
          ((System.ComponentModel.ISupportInitialize)(this.translationsPaneSplitContainer)).BeginInit();
          this.translationsPaneSplitContainer.Panel1.SuspendLayout();
          this.translationsPaneSplitContainer.Panel2.SuspendLayout();
          this.translationsPaneSplitContainer.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.translationGrid)).BeginInit();
+         ((System.ComponentModel.ISupportInitialize)(this.translatedTextRowBindingSource)).BeginInit();
          ((System.ComponentModel.ISupportInitialize)(this.translationsTextBoxesSplitContainer)).BeginInit();
          this.translationsTextBoxesSplitContainer.Panel1.SuspendLayout();
          this.translationsTextBoxesSplitContainer.Panel2.SuspendLayout();
@@ -87,8 +89,6 @@
          this.panel1.SuspendLayout();
          this.panel3.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.maxCharsUpDown)).BeginInit();
-         ((System.ComponentModel.ISupportInitialize)(this.settingsBindingSource)).BeginInit();
-         ((System.ComponentModel.ISupportInitialize)(this.translatedTextRowBindingSource)).BeginInit();
          this.SuspendLayout();
          // 
          // sourceTextBox
@@ -143,6 +143,10 @@
          this.languageTextBox.Name = "languageTextBox";
          this.languageTextBox.Size = new System.Drawing.Size(52, 20);
          this.languageTextBox.TabIndex = 6;
+         // 
+         // settingsBindingSource
+         // 
+         this.settingsBindingSource.DataSource = typeof(AzureMultiTranslator.Settings);
          // 
          // lengthTextBox
          // 
@@ -215,7 +219,7 @@
             this.Translate,
             this.languageDataGridViewTextBoxColumn,
             this.translatedTextDataGridViewTextBoxColumn,
-            this.CopyTranslatedColumn,
+            this.copyTranslatedColumn,
             this.backTranslatedTextDataGridViewTextBoxColumn,
             this.copyBackTranslatedColumn,
             this.deleteColumn});
@@ -236,17 +240,43 @@
          this.Translate.DataPropertyName = "Translate";
          this.Translate.HeaderText = "";
          this.Translate.Name = "Translate";
-         this.Translate.Width = 21;
+         this.Translate.Width = 5;
          // 
-         // CopyTranslatedColumn
+         // languageDataGridViewTextBoxColumn
          // 
-         this.CopyTranslatedColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-         this.CopyTranslatedColumn.DataPropertyName = "Copy";
-         this.CopyTranslatedColumn.HeaderText = "";
-         this.CopyTranslatedColumn.MinimumWidth = 10;
-         this.CopyTranslatedColumn.Name = "CopyTranslatedColumn";
-         this.CopyTranslatedColumn.ReadOnly = true;
-         this.CopyTranslatedColumn.Width = 21;
+         this.languageDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+         this.languageDataGridViewTextBoxColumn.DataPropertyName = "Language";
+         this.languageDataGridViewTextBoxColumn.HeaderText = "";
+         this.languageDataGridViewTextBoxColumn.MinimumWidth = 10;
+         this.languageDataGridViewTextBoxColumn.Name = "languageDataGridViewTextBoxColumn";
+         this.languageDataGridViewTextBoxColumn.ReadOnly = true;
+         this.languageDataGridViewTextBoxColumn.Width = 10;
+         // 
+         // translatedTextDataGridViewTextBoxColumn
+         // 
+         this.translatedTextDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+         this.translatedTextDataGridViewTextBoxColumn.DataPropertyName = "TranslatedText";
+         this.translatedTextDataGridViewTextBoxColumn.HeaderText = "Translated";
+         this.translatedTextDataGridViewTextBoxColumn.MinimumWidth = 10;
+         this.translatedTextDataGridViewTextBoxColumn.Name = "translatedTextDataGridViewTextBoxColumn";
+         // 
+         // copyTranslatedColumn
+         // 
+         this.copyTranslatedColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+         this.copyTranslatedColumn.DataPropertyName = "Copy";
+         this.copyTranslatedColumn.HeaderText = "";
+         this.copyTranslatedColumn.MinimumWidth = 10;
+         this.copyTranslatedColumn.Name = "copyTranslatedColumn";
+         this.copyTranslatedColumn.ReadOnly = true;
+         this.copyTranslatedColumn.Width = 10;
+         // 
+         // backTranslatedTextDataGridViewTextBoxColumn
+         // 
+         this.backTranslatedTextDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+         this.backTranslatedTextDataGridViewTextBoxColumn.DataPropertyName = "BackTranslatedText";
+         this.backTranslatedTextDataGridViewTextBoxColumn.HeaderText = "Back-Translated";
+         this.backTranslatedTextDataGridViewTextBoxColumn.MinimumWidth = 10;
+         this.backTranslatedTextDataGridViewTextBoxColumn.Name = "backTranslatedTextDataGridViewTextBoxColumn";
          // 
          // copyBackTranslatedColumn
          // 
@@ -258,7 +288,7 @@
          this.copyBackTranslatedColumn.ReadOnly = true;
          this.copyBackTranslatedColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
          this.copyBackTranslatedColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-         this.copyBackTranslatedColumn.Width = 21;
+         this.copyBackTranslatedColumn.Width = 19;
          // 
          // deleteColumn
          // 
@@ -268,7 +298,11 @@
          this.deleteColumn.MinimumWidth = 10;
          this.deleteColumn.Name = "deleteColumn";
          this.deleteColumn.ReadOnly = true;
-         this.deleteColumn.Width = 21;
+         this.deleteColumn.Width = 10;
+         // 
+         // translatedTextRowBindingSource
+         // 
+         this.translatedTextRowBindingSource.DataSource = typeof(AzureMultiTranslator.TranslatedTextRow);
          // 
          // translationsTextBoxesSplitContainer
          // 
@@ -442,6 +476,40 @@
          this.panel3.Size = new System.Drawing.Size(984, 32);
          this.panel3.TabIndex = 2;
          // 
+         // maxCharsUpDown
+         // 
+         this.maxCharsUpDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+         this.maxCharsUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.settingsBindingSource, "MaxChars", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+         this.maxCharsUpDown.Increment = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+         this.maxCharsUpDown.Location = new System.Drawing.Point(909, 8);
+         this.maxCharsUpDown.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+         this.maxCharsUpDown.Name = "maxCharsUpDown";
+         this.maxCharsUpDown.Size = new System.Drawing.Size(67, 20);
+         this.maxCharsUpDown.TabIndex = 7;
+         this.maxCharsUpDown.Value = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+         // 
+         // maxCharsLabel
+         // 
+         this.maxCharsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+         this.maxCharsLabel.AutoSize = true;
+         this.maxCharsLabel.Location = new System.Drawing.Point(846, 10);
+         this.maxCharsLabel.Name = "maxCharsLabel";
+         this.maxCharsLabel.Size = new System.Drawing.Size(57, 13);
+         this.maxCharsLabel.TabIndex = 6;
+         this.maxCharsLabel.Text = "Max Chars";
+         // 
          // rememberKeyCheckBox
          // 
          this.rememberKeyCheckBox.AutoSize = true;
@@ -492,74 +560,6 @@
          this.settingsTimer.Interval = 250;
          this.settingsTimer.Tick += new System.EventHandler(this.settingsTimer_Tick);
          // 
-         // maxCharsLabel
-         // 
-         this.maxCharsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-         this.maxCharsLabel.AutoSize = true;
-         this.maxCharsLabel.Location = new System.Drawing.Point(846, 10);
-         this.maxCharsLabel.Name = "maxCharsLabel";
-         this.maxCharsLabel.Size = new System.Drawing.Size(57, 13);
-         this.maxCharsLabel.TabIndex = 6;
-         this.maxCharsLabel.Text = "Max Chars";
-         // 
-         // maxCharsUpDown
-         // 
-         this.maxCharsUpDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-         this.maxCharsUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.settingsBindingSource, "MaxChars", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-         this.maxCharsUpDown.Increment = new decimal(new int[] {
-            500,
-            0,
-            0,
-            0});
-         this.maxCharsUpDown.Location = new System.Drawing.Point(909, 8);
-         this.maxCharsUpDown.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-         this.maxCharsUpDown.Name = "maxCharsUpDown";
-         this.maxCharsUpDown.Size = new System.Drawing.Size(67, 20);
-         this.maxCharsUpDown.TabIndex = 7;
-         this.maxCharsUpDown.Value = new decimal(new int[] {
-            5000,
-            0,
-            0,
-            0});
-         // 
-         // settingsBindingSource
-         // 
-         this.settingsBindingSource.DataSource = typeof(AzureMultiTranslator.Settings);
-         // 
-         // languageDataGridViewTextBoxColumn
-         // 
-         this.languageDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
-         this.languageDataGridViewTextBoxColumn.DataPropertyName = "Language";
-         this.languageDataGridViewTextBoxColumn.HeaderText = "";
-         this.languageDataGridViewTextBoxColumn.MinimumWidth = 10;
-         this.languageDataGridViewTextBoxColumn.Name = "languageDataGridViewTextBoxColumn";
-         this.languageDataGridViewTextBoxColumn.ReadOnly = true;
-         this.languageDataGridViewTextBoxColumn.Width = 21;
-         // 
-         // translatedTextDataGridViewTextBoxColumn
-         // 
-         this.translatedTextDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-         this.translatedTextDataGridViewTextBoxColumn.DataPropertyName = "TranslatedText";
-         this.translatedTextDataGridViewTextBoxColumn.HeaderText = "Translated";
-         this.translatedTextDataGridViewTextBoxColumn.MinimumWidth = 10;
-         this.translatedTextDataGridViewTextBoxColumn.Name = "translatedTextDataGridViewTextBoxColumn";
-         // 
-         // backTranslatedTextDataGridViewTextBoxColumn
-         // 
-         this.backTranslatedTextDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-         this.backTranslatedTextDataGridViewTextBoxColumn.DataPropertyName = "BackTranslatedText";
-         this.backTranslatedTextDataGridViewTextBoxColumn.HeaderText = "Back-Translated";
-         this.backTranslatedTextDataGridViewTextBoxColumn.MinimumWidth = 10;
-         this.backTranslatedTextDataGridViewTextBoxColumn.Name = "backTranslatedTextDataGridViewTextBoxColumn";
-         // 
-         // translatedTextRowBindingSource
-         // 
-         this.translatedTextRowBindingSource.DataSource = typeof(AzureMultiTranslator.TranslatedTextRow);
-         // 
          // MainForm
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -579,11 +579,13 @@
          this.mainSplitContainer.ResumeLayout(false);
          this.panel2.ResumeLayout(false);
          this.panel2.PerformLayout();
+         ((System.ComponentModel.ISupportInitialize)(this.settingsBindingSource)).EndInit();
          this.translationsPaneSplitContainer.Panel1.ResumeLayout(false);
          this.translationsPaneSplitContainer.Panel2.ResumeLayout(false);
          ((System.ComponentModel.ISupportInitialize)(this.translationsPaneSplitContainer)).EndInit();
          this.translationsPaneSplitContainer.ResumeLayout(false);
          ((System.ComponentModel.ISupportInitialize)(this.translationGrid)).EndInit();
+         ((System.ComponentModel.ISupportInitialize)(this.translatedTextRowBindingSource)).EndInit();
          this.translationsTextBoxesSplitContainer.Panel1.ResumeLayout(false);
          this.translationsTextBoxesSplitContainer.Panel1.PerformLayout();
          this.translationsTextBoxesSplitContainer.Panel2.ResumeLayout(false);
@@ -595,8 +597,6 @@
          this.panel3.ResumeLayout(false);
          this.panel3.PerformLayout();
          ((System.ComponentModel.ISupportInitialize)(this.maxCharsUpDown)).EndInit();
-         ((System.ComponentModel.ISupportInitialize)(this.settingsBindingSource)).EndInit();
-         ((System.ComponentModel.ISupportInitialize)(this.translatedTextRowBindingSource)).EndInit();
          this.ResumeLayout(false);
 
       }
@@ -638,7 +638,7 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn Translate;
         private System.Windows.Forms.DataGridViewTextBoxColumn languageDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn translatedTextDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewButtonColumn CopyTranslatedColumn;
+        private System.Windows.Forms.DataGridViewButtonColumn copyTranslatedColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn backTranslatedTextDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewButtonColumn copyBackTranslatedColumn;
         private System.Windows.Forms.DataGridViewButtonColumn deleteColumn;
