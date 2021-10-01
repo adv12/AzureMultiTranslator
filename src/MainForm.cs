@@ -75,9 +75,27 @@ namespace AzureMultiTranslator
             int translationsTextBoxesSplitContainerSplitterDistance =
                 Settings.TranslationsTextBoxesSplitContainerSplitterDistance;
 
-            Location = Settings.WindowLocation;
+            Point location = Settings.WindowLocation;
+            if (location.X < 0)
+            {
+                location.X = 0;
+            }
+            if (location.Y < 0)
+            {
+                location.Y = 0;
+            }
+            Location = location;
 
             Size size = Settings.WindowSize;
+            if (size.Width < 100)
+            {
+                size.Width = 100;
+            }
+                
+            if (size.Height < 100)
+            {
+                size.Height = 100;
+            }    
 
             if (Settings.Maximized)
             {
@@ -381,7 +399,7 @@ namespace AzureMultiTranslator
         {
             if (Settings != null)
             {
-                if (WindowState != FormWindowState.Minimized && WindowState != FormWindowState.Maximized)
+                if (WindowState == FormWindowState.Normal)
                 {
                     Settings.WindowSize = Size;
                 }
@@ -484,7 +502,7 @@ namespace AzureMultiTranslator
 
         private void MainForm_Move(object sender, EventArgs e)
         {
-            if (Settings != null && WindowState != FormWindowState.Maximized)
+            if (Settings != null && WindowState == FormWindowState.Normal)
             {
                 Settings.WindowLocation = Location;
             }
