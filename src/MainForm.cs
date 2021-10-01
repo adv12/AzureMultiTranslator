@@ -19,6 +19,8 @@ namespace AzureMultiTranslator
     {
         const string APPNAME = "AzureMultiTranslator";
 
+        private bool _everActivated = false;
+
         private Translator Translator { get; }
 
         private string SettingsDirPath { get; }
@@ -72,13 +74,56 @@ namespace AzureMultiTranslator
                 Settings.TranslationsPaneSplitContainerSplitterDistance;
             int translationsTextBoxesSplitContainerSplitterDistance =
                 Settings.TranslationsTextBoxesSplitContainerSplitterDistance;
-            Size = Settings.WindowSize;
-            mainSplitContainer.SplitterDistance =
-                mainSplitContainerSplitterDistance;
-            translationsPaneSplitContainer.SplitterDistance =
-                translationsPaneSplitContainerSplitterDistance;
-            translationsTextBoxesSplitContainer.SplitterDistance =
-                translationsTextBoxesSplitContainerSplitterDistance;
+
+            Location = Settings.WindowLocation;
+
+            Size size = Settings.WindowSize;
+
+            if (Settings.Maximized)
+            {
+                 WindowState = FormWindowState.Maximized;
+            }
+            Activated += (s, e) =>
+            {
+                if (_everActivated)
+                {
+                    return;
+                }
+                _everActivated = true;
+                if (WindowState != FormWindowState.Maximized)
+                {
+                    Size = size;
+                }
+                try
+                {
+                    mainSplitContainer.SplitterDistance =
+                        mainSplitContainerSplitterDistance;
+                }
+                catch
+                {
+                    // NBD
+                }
+                try
+                {
+                    translationsPaneSplitContainer.SplitterDistance =
+                        translationsPaneSplitContainerSplitterDistance;
+                }
+                catch
+                {
+                    // NBD
+                }
+                try
+                {
+                    translationsTextBoxesSplitContainer.SplitterDistance =
+                        translationsTextBoxesSplitContainerSplitterDistance;
+                }
+                catch
+                {
+                    // NBD
+                }
+                Size = size;
+            };
+
             foreach (string language in Settings.Languages)
             {
                 Rows.Add(new TranslatedTextRow(language));
@@ -336,7 +381,11 @@ namespace AzureMultiTranslator
         {
             if (Settings != null)
             {
-                Settings.WindowSize = Size;
+                if (WindowState != FormWindowState.Minimized && WindowState != FormWindowState.Maximized)
+                {
+                    Settings.WindowSize = Size;
+                }
+                Settings.Maximized = (WindowState == FormWindowState.Maximized);
             }
         }
 
@@ -430,6 +479,14 @@ namespace AzureMultiTranslator
             for (int i = insertIndex; i < insertIndex + rows.Count; i++)
             {
                 translationGrid.Rows[i].Selected = true;
+            }
+        }
+
+        private void MainForm_Move(object sender, EventArgs e)
+        {
+            if (Settings != null && WindowState != FormWindowState.Maximized)
+            {
+                Settings.WindowLocation = Location;
             }
         }
     }

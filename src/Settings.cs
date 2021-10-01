@@ -78,6 +78,13 @@ namespace AzureMultiTranslator
             set => SetField(ref _windowSize, value);
         }
 
+        private Point _windowLocation = new Point(0, 0);
+        public Point WindowLocation
+        {
+            get => _windowLocation;
+            set => SetField(ref _windowLocation, value);
+        }
+
         private int _mainSplitContainerSplitterDistance = 300;
         public int MainSplitContainerSplitterDistance
         {
@@ -97,6 +104,13 @@ namespace AzureMultiTranslator
         {
             get => _translationsTextBoxesSplitContainerSplitterDistance;
             set => SetField(ref _translationsTextBoxesSplitContainerSplitterDistance, value);
+        }
+
+        private bool _maximized = false;
+        public bool Maximized
+        {
+            get => _maximized;
+            set => SetField(ref _maximized, value);
         }
 
         public Settings()
