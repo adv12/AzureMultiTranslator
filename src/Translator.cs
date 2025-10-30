@@ -44,12 +44,15 @@ namespace AzureMultiTranslator
                 List<string> translations = new List<string>();
                 try
                 {
-                    TranslationResult[] deserializedOutput = JsonConvert.DeserializeObject<TranslationResult[]>(result);
-                    foreach (TranslationResult o in deserializedOutput)
+                    TranslationResult[]? deserializedOutput = JsonConvert.DeserializeObject<TranslationResult[]>(result);
+                    if (deserializedOutput != null)
                     {
-                        foreach (Translation t in o.Translations)
+                        foreach (TranslationResult o in deserializedOutput)
                         {
-                            translations.Add(t.Text);
+                            foreach (Translation t in o.Translations)
+                            {
+                                translations.Add(t.Text);
+                            }
                         }
                     }
                 }
@@ -57,8 +60,15 @@ namespace AzureMultiTranslator
                 {
                     try
                     {
-                        ErrorWrapper wrapper = JsonConvert.DeserializeObject<ErrorWrapper>(result);
-                        throw new AzureException(wrapper.Error.Code, wrapper.Error.Message);
+                        ErrorWrapper? wrapper = JsonConvert.DeserializeObject<ErrorWrapper>(result);
+                        int code = 0;
+                        string message = "Unknown Error";
+                        if (wrapper != null)
+                        {
+                            code = wrapper.Error.Code;
+                            message = wrapper.Error.Message;
+                        }
+                        throw new AzureException(code, message);
                     }
                     catch (JsonException)
                     {

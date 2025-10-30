@@ -331,14 +331,15 @@ namespace AzureMultiTranslator
         private void UpdateTranslateButton()
         {
             int length = sourceTextBox.Text.Length;
-            translateButton.Enabled = length > 0 && length <= 5000 && !string.IsNullOrWhiteSpace(Settings.SubscriptionKey);
+            translateButton.Enabled = length > 0 && length <= maxCharsUpDown.Value && !string.IsNullOrWhiteSpace(Settings.SubscriptionKey);
         }
 
         private void englishTextBox_TextChanged(object sender, EventArgs e)
         {
             UpdateTranslateButton();
             lengthTextBox.Text = sourceTextBox.Text.Length.ToString();
-            if (translateButton.Enabled)
+            int length = lengthTextBox.Text.Length;
+            if (length <= maxCharsUpDown.Value)
             {
                 lengthTextBox.ForeColor = SystemColors.ControlText;
             }
